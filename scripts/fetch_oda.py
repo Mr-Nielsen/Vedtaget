@@ -82,47 +82,104 @@ def parse_dato(s: str | None) -> datetime | None:
 
 # --- Partistemmer fra konklusionsteksten --------------------------------------
 
+# To formater forekommer:
+#   nyt:    "For stemte 57 (V, DF, Jacob Harris (UFG) og RV), imod stemte 0, hverken for eller imod stemte 52 (S, SF)"
+#   ældre:  "90 stemmer for forslaget (S, V)  15 stemmer imod forslaget (EL)  0 stemmer hverken for eller imod forslaget"
 _KONKL = {
-    "for": re.compile(r"(\d+)\s+stemmer?\s+for\s+forslaget\s*(?:\(([^)]*)\))?", re.I),
-    "imod": re.compile(r"(\d+)\s+stemmer?\s+imod\s+forslaget\s*(?:\(([^)]*)\))?", re.I),
-    "hverken": re.compile(
-        r"(\d+)\s+stemmer?\s+hverken\s+for\s+eller\s+imod\s+forslaget\s*(?:\(([^)]*)\))?",
-        re.I,
-    ),
+    "hverken": [re.compile(r"hverken\s+for\s+eller\s+imod\s+stemte\s+(\d+)", re.I),
+                re.compile(r"(\d+)\s+stemmer?\s+hverken\s+for\s+eller\s+imod\s+forslaget", re.I)],
+    "for": [re.compile(r"(?<![a-zæøå])for\s+stemte\s+(\d+)", re.I),
+            re.compile(r"(\d+)\s+stemmer?\s+for\s+forslaget", re.I)],
+    "imod": [re.compile(r"(?<!eller )imod\s+stemte\s+(\d+)", re.I),
+             re.compile(r"(\d+)\s+stemmer?\s+imod\s+forslaget", re.I)],
 }
+_PERSON_RX = re.compile(r"^(.+?)\s*\(([^()]+)\)$")
+
+
+def _parentes_efter(tekst: str, pos: int) -> str:
+    """Indholdet af en balanceret parentes, der starter lige efter pos (ellers "")."""
+    i = pos
+    while i < len(tekst) and tekst[i] in " \t\n":
+        i += 1
+    if i >= len(tekst) or tekst[i] != "(":
+        return ""
+    dybde, start = 0, i
+    for j in range(i, len(tekst)):
+        if tekst[j] == "(":
+            dybde += 1
+        elif tekst[j] == ")":
+            dybde -= 1
+            if dybde == 0:
+                return tekst[start + 1 : j]
+    return ""
+
+
+def _split_top(liste: str) -> list[str]:
+    """Del på komma og ' og ' uden for parenteser."""
+    dele, buf, dybde, i = [], "", 0, 0
+    while i < len(liste):
+        c = liste[i]
+        if c == "(":
+            dybde += 1
+        elif c == ")":
+            dybde -= 1
+        if dybde == 0 and (c == "," or liste.startswith(" og ", i)):
+            dele.append(buf)
+            buf = ""
+            i += 1 if c == "," else 4
+            continue
+        buf += c
+        i += 1
+    dele.append(buf)
+    return [d.strip() for d in dele if d.strip()]
 
 
 def parse_konklusion(tekst: str | None) -> tuple[dict, dict] | None:
-    """Returnerer (optælling, partier) eller None, hvis teksten ikke kan læses."""
+    """Returnerer (optælling, partier) eller None, hvis teksten ikke kan læses.
+
+    Partier nævnt som parti tæller direkte. Enkeltmedlemmer, fx "Navn (EL)",
+    bruges kun for partier, der ikke er nævnt samlet; så afgør flertallet af
+    partiets enkeltmedlemmer.
+    """
     if not tekst:
         return None
     tal, partier = {}, {}
-    for valg, rx in _KONKL.items():
-        m = rx.search(tekst)
-        if not m:
-            continue
-        tal[valg] = int(m.group(1))
-        for p in (m.group(2) or "").split(","):
-            p = p.strip()
-            if p:
-                partier[p] = valg
+    enkelte: dict[str, Counter] = defaultdict(Counter)
+    for valg, regexer in _KONKL.items():
+        for rx in regexer:
+            m = rx.search(tekst)
+            if not m:
+                continue
+            tal[valg] = int(m.group(1))
+            for del_ in _split_top(_parentes_efter(tekst, m.end())):
+                pm = _PERSON_RX.match(del_)
+                if pm:
+                    enkelte[pm.group(2).strip()][valg] += 1
+                elif len(del_) <= 6:  # partiforkortelse
+                    partier[del_] = valg
+            break
     if "for" not in tal or "imod" not in tal:
         return None
     tal.setdefault("hverken", 0)
+    for parti, c in enkelte.items():
+        if parti not in partier:
+            partier[parti] = c.most_common(1)[0][0]
     return tal, partier
 
 
 # --- Fallback: tæl medlemmernes stemmer op pr. parti ---------------------------
 
 _aktor_parti: dict[int, str | None] = {}
-_PARTI_RX = re.compile(r"<partyShortname>\s*([^<]+?)\s*</partyShortname>", re.I)
+_PARTI_RX = re.compile(
+    r"<partyShortname>\s*([^<]+?)\s*</partyShortname>|<title>[^<]*\(([^()<]+)\)\s*</title>", re.I
+)
 
 
 def parti_for_aktor(aktor: dict) -> str | None:
     aid = aktor["id"]
     if aid not in _aktor_parti:
         m = _PARTI_RX.search(aktor.get("biografi") or "")
-        _aktor_parti[aid] = m.group(1) if m else None
+        _aktor_parti[aid] = (m.group(1) or m.group(2)).strip() if m else None
     return _aktor_parti[aid]
 
 

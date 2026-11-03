@@ -12,7 +12,7 @@ const PARTINAVNE = {
   KONS: "Det Konservative Folkeparti", EL: "Enhedslisten", DF: "Dansk Folkeparti",
   RV: "Radikale Venstre", ALT: "Alternativet", BP: "Borgernes Parti",
   NB: "Nye Borgerlige", KD: "Kristendemokraterne", FG: "Frie Grønne",
-  SIU: "Siumut", IA: "Inuit Ataqatigiit", NQ: "Naleraq",
+  SIU: "Siumut", IA: "Inuit Ataqatigiit", NQ: "Naleraq", N: "Naleraq",
   JF: "Javnaðarflokkurin", SP: "Sambandsflokkurin", T: "Tjóðveldi", TF: "Tjóðveldi",
 };
 const IKKE_PARTIER = new Set(["UFG", "UP"]);
