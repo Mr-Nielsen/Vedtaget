@@ -1,5 +1,5 @@
 // Netværk først for alt, så opdateringer slår igennem; cachen bruges kun offline.
-const CACHE = "vedtaget-v2";
+const CACHE = "vedtaget-v3";
 const SHELL = ["./", "index.html", "styles.css", "app.js", "manifest.webmanifest", "icons/icon.svg"];
 
 self.addEventListener("install", (e) => {
