@@ -167,8 +167,8 @@ function afsloering(sag, mit) {
   Object.values(grupper).forEach((g) => g.sort((a, b) => partinavn(a).localeCompare(partinavn(b), "da")));
 
   const andel = r.for / Math.max(1, r.for + r.imod);
-  const flertal = r.imod === 0 ? "enstemmigt blandt de stemmende"
-    : andel >= 0.8 ? "bredt flertal" : andel >= 0.6 ? "klart flertal" : "smalt flertal";
+  const flertal = r.imod === 0 ? "uden stemmer imod"
+    : andel >= 0.8 ? "med bredt flertal" : andel >= 0.6 ? "med klart flertal" : "med smalt flertal";
 
   return el("section", { class: "reveal", "aria-live": "polite" },
     el("p", { class: "you" }, "Din stemme: ", el("strong", {}, VALG_TEKST[mit] || "–")),
@@ -176,7 +176,7 @@ function afsloering(sag, mit) {
       el("span", { class: "t-for", style: `width:${(r.for / total) * 100}%` }),
       el("span", { class: "t-imod", style: `width:${(r.imod / total) * 100}%` }),
       el("span", { class: "t-hverken", style: `width:${(r.hverken / total) * 100}%` })),
-    el("p", { class: "tally-label" }, `${r.for} for · ${r.imod} imod · ${r.hverken} hverken — vedtaget med ${flertal}`),
+    el("p", { class: "tally-label" }, `${r.for} for · ${r.imod} imod · ${r.hverken} hverken — vedtaget ${flertal}`),
     el("div", { class: "groups" },
       ...["for", "imod", "hverken"].filter((k) => grupper[k].length).map((k) =>
         el("div", { class: "group" + (mit === k ? " mine" : "") },
