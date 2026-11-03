@@ -41,7 +41,7 @@ def get(path: str, params: dict | None = None, retries: int = 3) -> dict:
     if params:
         # ODA kræver %24 i stedet for $ i parameternavne.
         url += "?" + "&".join(
-            f"{urllib.parse.quote(k)}={urllib.parse.quote(str(v), safe=',/()')}"
+            f"{k}={urllib.parse.quote(str(v), safe=',/()')}"
             for k, v in params.items()
         )
     for attempt in range(retries):
