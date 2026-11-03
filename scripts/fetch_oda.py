@@ -4,7 +4,9 @@
 Kun standardbiblioteket bruges, så GitHub Actions ikke skal installere noget.
 
 Logik:
-  1. Hent afstemninger af typen "Endelig vedtagelse" (typeid 1), nyeste først,
+  0. Slå typernes id'er op ud fra deres navne (Sagstype, Afstemningstype,
+     Stemmetype), så intet afhænger af hårdkodede numre.
+  1. Hent afstemninger af typen "Endelig vedtagelse", nyeste først,
      med tilhørende sagstrin, sag og møde (for datoen).
   2. Behold dem, hvor forslaget blev vedtaget, og som ligger inden for DAYS_BACK.
   3. Find hvert partis stemme. Først fra afstemningens konklusionstekst, som
@@ -30,10 +32,39 @@ DAYS_BACK = int(os.environ.get("DAYS_BACK", "400"))
 OUT = Path(__file__).resolve().parent.parent / "data" / "sager.json"
 USER_AGENT = "vedtaget-app/1.0 (privat hobbyprojekt)"
 
-AFSTEMNINGSTYPE_ENDELIG = 1
-STEMMETYPE = {1: "for", 2: "imod", 3: "fravaer", 4: "hverken"}
-SAGSTYPE = {3: "Lovforslag", 5: "Beslutningsforslag"}
-SAGSTYPE_STI = {3: "lovforslag", 5: "beslutningsforslag"}
+# Udfyldes af indlaes_typer() ud fra ODA's egne klassifikationstabeller.
+AFSTEMNINGSTYPE_ENDELIG: int | None = None
+STEMMETYPE: dict[int, str] = {}
+SAGSTYPE: dict[int, str] = {}
+SAGSTYPE_STI = {"Lovforslag": "lovforslag", "Beslutningsforslag": "beslutningsforslag"}
+_STEMME_NAVNE = {"for": "for", "imod": "imod", "fravær": "fravaer", "hverken for eller imod": "hverken"}
+
+
+def indlaes_typer() -> None:
+    """Find id'er ud fra navne, og stop højlydt hvis et forventet navn mangler."""
+    global AFSTEMNINGSTYPE_ENDELIG
+    navne = lambda tabel: {t["id"]: (t.get("type") or "").strip() for t in get(tabel).get("value", [])}
+
+    for i, n in navne("Afstemningstype").items():
+        if n.lower() == "endelig vedtagelse":
+            AFSTEMNINGSTYPE_ENDELIG = i
+    for i, n in navne("Sagstype").items():
+        if n in SAGSTYPE_STI:
+            SAGSTYPE[i] = n
+    for i, n in navne("Stemmetype").items():
+        if n.lower() in _STEMME_NAVNE:
+            STEMMETYPE[i] = _STEMME_NAVNE[n.lower()]
+
+    mangler = []
+    if AFSTEMNINGSTYPE_ENDELIG is None:
+        mangler.append("Afstemningstype 'Endelig vedtagelse'")
+    if set(SAGSTYPE.values()) != set(SAGSTYPE_STI):
+        mangler.append(f"Sagstype {set(SAGSTYPE_STI) - set(SAGSTYPE.values())}")
+    if set(STEMMETYPE.values()) != set(_STEMME_NAVNE.values()):
+        mangler.append(f"Stemmetype {set(_STEMME_NAVNE.values()) - set(STEMMETYPE.values())}")
+    if mangler:
+        raise RuntimeError("ODA's typetabeller har ændret sig, mangler: " + ", ".join(mangler))
+    print(f"Typer: endelig vedtagelse={AFSTEMNINGSTYPE_ENDELIG}, sager={SAGSTYPE}, stemmer={STEMMETYPE}")
 
 
 def get(path: str, params: dict | None = None, retries: int = 3) -> dict:
@@ -220,7 +251,7 @@ def samling(periode_id: int | None) -> str | None:
 
 def ft_link(sag: dict) -> str | None:
     kode = samling(sag.get("periodeid"))
-    sti = SAGSTYPE_STI.get(sag.get("typeid"))
+    sti = SAGSTYPE_STI.get(SAGSTYPE.get(sag.get("typeid"), ""))
     nummer = (sag.get("nummer") or "").replace(" ", "")
     if kode and sti and nummer:
         return f"https://www.ft.dk/samling/{kode}/{sti}/{nummer}/index.htm"
@@ -228,6 +259,7 @@ def ft_link(sag: dict) -> str | None:
 
 
 def main() -> int:
+    indlaes_typer()
     graense = datetime.now(timezone.utc) - timedelta(days=DAYS_BACK)
     sager = []
     sete_sager = set()
@@ -240,7 +272,14 @@ def main() -> int:
             "%24expand": "Sagstrin/Sag,Møde",
         },
     )
-    for a in afstemninger:
+    for n, a in enumerate(afstemninger):
+        if a.get("typeid") != AFSTEMNINGSTYPE_ENDELIG or "Sagstrin" not in a:
+            raise RuntimeError(
+                f"ODA ignorerede filteret eller udvidelsen (afstemning {a.get('id')} har typeid "
+                f"{a.get('typeid')}). Stopper i stedet for at gemme forkerte data."
+            )
+        if n == 0 and a.get("Møde") is None:
+            raise RuntimeError("Mødedato mangler - udvidelsen med Møde virkede ikke.")
         dato = parse_dato((a.get("Møde") or {}).get("dato"))
         if dato and dato < graense:
             break

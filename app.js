@@ -183,6 +183,7 @@ function sagKort(sag, afsloeret) {
       el("span", { class: "tag" }, sag.nummer || sag.type),
       el("span", { class: "date" }, `${sag.type}, vedtaget ${fmtDato(sag.dato)}`)),
     el("h2", {}, sag.titelkort || sag.titel),
+    sag.type === "Beslutningsforslag" ? el("p", { class: "note-b" }, "Et beslutningsforslag pålægger regeringen at handle. Det er ikke i sig selv en lov.") : null,
     sag.titel && sag.titel !== sag.titelkort ? el("p", { class: "fulltitle" }, sag.titel) : null,
     el("p", { class: "resume" }, resume || "Folketinget har ikke skrevet et resumé af denne sag."),
     el("div", { class: "links" },
@@ -224,6 +225,7 @@ function gørSwipebar(kort, sag) {
     if (e.target.closest("button, a")) return;
     start = { x: e.clientX, y: e.clientY }; dx = 0;
     kort.style.transition = "none";
+    try { kort.setPointerCapture(e.pointerId); } catch (_) { /* ikke understøttet */ }
   });
   kort.addEventListener("pointermove", (e) => {
     if (!start) return;

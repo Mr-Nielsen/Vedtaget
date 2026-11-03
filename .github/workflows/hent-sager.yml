@@ -23,8 +23,10 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Test parser
-        run: python tests/test_parse.py
+      - name: Test
+        run: |
+          python tests/test_parse.py
+          python tests/test_fetch.py
 
       - name: Hent fra Folketingets Åbne Data
         run: python scripts/fetch_oda.py
