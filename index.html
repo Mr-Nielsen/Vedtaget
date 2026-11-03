@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Vedtaget</title>
+  <meta name="description" content="Tag stilling til de sager, Folketinget har vedtaget, og se hvilke partier du stemmer som.">
+  <meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#16181c" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Vedtaget">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <h1>Vedtaget</h1>
+    </div>
+    <p class="sub" id="status">Henter sager …</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" data-view="feed" aria-selected="true">Til stillingtagen <span class="badge" id="badge" hidden></span></button>
+    <button role="tab" data-view="match" aria-selected="false">Mit match</button>
+    <button role="tab" data-view="historik" aria-selected="false">Historik</button>
+  </nav>
+
+  <main id="view" tabindex="-1"></main>
+
+  <footer class="foot">
+    <p>Data: Folketingets Åbne Data. Resuméerne er Folketingets egne. Dine stemmer gemmes kun på denne enhed.</p>
+    <p class="foot-actions">
+      <button class="link" id="export">Gem backup</button>
+      <label class="link">Indlæs backup<input type="file" id="import" accept="application/json" hidden></label>
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

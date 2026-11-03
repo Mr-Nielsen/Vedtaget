@@ -1,0 +1,42 @@
+name: Hent vedtagne sager
+
+on:
+  schedule:
+    # Hver lørdag kl. 06:17 UTC (efter ugens afstemninger)
+    - cron: "17 6 * * 6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: hent-sager
+  cancel-in-progress: false
+
+jobs:
+  hent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Test parser
+        run: python tests/test_parse.py
+
+      - name: Hent fra Folketingets Åbne Data
+        run: python scripts/fetch_oda.py
+
+      - name: Gem ændringer
+        run: |
+          if [ -z "$(git status --porcelain -- data/)" ]; then
+            echo "Ingen nye sager."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add data/sager.json
+          git commit -m "Opdater vedtagne sager"
+          git push
