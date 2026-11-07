@@ -1,5 +1,5 @@
 {
- "genereret": "2026-11-03T14:35:27+00:00",
+ "genereret": "2026-11-07T12:57:51+00:00",
  "kilde": "Folketingets Åbne Data (oda.ft.dk)",
  "sager": [
   {
@@ -3904,37 +3904,6 @@
     "RV": "for",
     "ALT": "for",
     "DF": "imod"
-   },
-   "partikilde": "konklusion"
-  },
-  {
-   "id": 102719,
-   "afstemningId": 10378,
-   "nummer": "L 223",
-   "type": "Lovforslag",
-   "titel": "Forslag til lov om ændring af lov om autorisation af sundhedspersoner og om sundhedsfaglig virksomhed. (Kvote for antallet af autorisationsansøgninger fra tredjelande, afvisning af allerede indgivne ansøgninger, afslag på ansøgninger om autorisationsopholdstilladelse og afskæring af administrativ klageadgang i forbindelse med kvoter).",
-   "titelkort": "Om en kvoteordning for antallet af autorisationsansøgninger fra sundhedspersoner fra tredjelande m.v.",
-   "resume": "Lovforslaget etablerer en kvoteordning, der skal være med til at sikre, at der er sammenhæng mellem det antal udenlandske sundhedspersoner fra tredjelande, der rejser til Danmark for at opnå dansk autorisation, og det behov der vurderes at være fremadrettet for sundhedspersoner inden for den pågældende faggruppe i regioner og kommuner.\n\nIndenrigs- og sundhedsministeren bliver bemyndiget til at fastsætte regler om kvoter, herunder undtagelser hertil, for antallet af ansøgninger om autorisation, som Styrelsen for Patientsikkerhed årligt kan modtage fra personer, som ikke er statsborgere i Danmark, Færøerne, Grønland og Den Europæiske Union, lande, der har tiltrådt EØS-aftalen, eller lande, som Den Europæiske Union har indgået aftale med om adgang til udøvelse af lovregulerede erhverv.\n\nKvoter vil kunne omfatte enhver sundhedsfaglig gruppe, der autoriseres efter autorisationsloven. \n\nLovforslaget forventes i første omgang at blive anvendt til at fastsætte kvoter for og afvise ansøgninger fra udenlandske sygeplejersker fra tredjelande, fordi der er større søgning mod Danmark af sygeplejersker fra tredjelande, end der er efterspørgsel efter.  \n\nDer vil blive fastsat regler om, at afgørelser fra Styrelsen for Patientsikkerhed om afvisning af ansøgninger på grund af kvoter ikke kan påklages.\n\nStyrelsen for International Rekruttering og Integration skal give afslag på ansøgning om opholdstilladelse med henblik på at opnå autorisation, når den kvote, der samtidig med eller umiddelbart efter lovens ikrafttræden bliver fastsat for udenlandske sygeplejersker, er opbrugt.\n\nDet foreslås, at loven træder i kraft den 7. oktober 2025.\n\n",
-   "dato": "2025-09-30",
-   "url": "https://www.ft.dk/samling/20241/lovforslag/L223/index.htm",
-   "resultat": {
-    "hverken": 0,
-    "for": 93,
-    "imod": 0
-   },
-   "partier": {
-    "S": "for",
-    "V": "for",
-    "DD": "for",
-    "SF": "for",
-    "LA": "for",
-    "M": "for",
-    "KF": "for",
-    "EL": "for",
-    "DF": "for",
-    "RV": "for",
-    "ALT": "for",
-    "UFG": "for"
    },
    "partikilde": "konklusion"
   }
