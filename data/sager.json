@@ -1,7 +1,71 @@
 {
- "genereret": "2026-11-07T12:57:51+00:00",
+ "genereret": "2026-11-14T13:28:59+00:00",
  "kilde": "Folketingets Åbne Data (oda.ft.dk)",
  "sager": [
+  {
+   "id": 106552,
+   "afstemningId": 10614,
+   "nummer": "L 36 B",
+   "type": "Lovforslag",
+   "titel": "Forslag til lov om ændring af momsloven. (Indførelse af nulmoms på bøger).",
+   "titelkort": "Om indførelse af nulmoms på bøger.",
+   "resume": "",
+   "dato": "2026-11-12",
+   "url": "https://www.ft.dk/samling/20261/lovforslag/L36B/index.htm",
+   "resultat": {
+    "hverken": 1,
+    "for": 93,
+    "imod": 15
+   },
+   "partier": {
+    "S": "for",
+    "SF": "for",
+    "V": "for",
+    "DF": "for",
+    "M": "for",
+    "KF": "for",
+    "EL": "for",
+    "RV": "for",
+    "ALT": "for",
+    "BP": "for",
+    "LA": "imod",
+    "DD": "imod",
+    "UFG": "for"
+   },
+   "partikilde": "konklusion"
+  },
+  {
+   "id": 106551,
+   "afstemningId": 10613,
+   "nummer": "L 36 A",
+   "type": "Lovforslag",
+   "titel": "Forslag til lov om ændring af lov om forskellige forbrugsafgifter, ligningsloven og forskellige andre love. (Afskaffelse af kaffeafgiften, indførelse af motions- og musikundervisningsfradrag, forbedring af mulighederne for godtgørelse til visse frivillige, afskaffelse af tillægsboafgiften for arv til søskendes børn, forbedring af mulighederne for at fradrage lønudgifter til udvikling af software, forhøjelse af standardfradrag for dagplejere, forhøjelse af det ekstra beskæftigelsesfradrag til seniorer og udvidelse af perioden for fradraget til 5 år før pensionsalderen, fritagelse for variabel tinglysningsafgift ved inddragelse af anden eller yderligere fast ejendom i visse eksisterende sampantsætninger og kategorisering af små transformerstationer som driftsmateriel og driftsinventar).",
+   "titelkort": "Om afskaffelse af kaffeafgiften og indførelse af motions- og musikundervisningsfradrag m.v.",
+   "resume": "",
+   "dato": "2026-11-12",
+   "url": "https://www.ft.dk/samling/20261/lovforslag/L36A/index.htm",
+   "resultat": {
+    "hverken": 14,
+    "for": 96,
+    "imod": 0
+   },
+   "partier": {
+    "LA": "hverken",
+    "EL": "hverken",
+    "S": "for",
+    "SF": "for",
+    "V": "for",
+    "DF": "for",
+    "M": "for",
+    "KF": "for",
+    "DD": "for",
+    "RV": "for",
+    "ALT": "for",
+    "BP": "for",
+    "UFG": "for"
+   },
+   "partikilde": "konklusion"
+  },
   {
    "id": 105254,
    "afstemningId": 10611,
