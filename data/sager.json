@@ -1,7 +1,40 @@
 {
- "genereret": "2026-11-14T13:28:59+00:00",
+ "genereret": "2026-11-21T14:37:24+00:00",
  "kilde": "Folketingets Åbne Data (oda.ft.dk)",
  "sager": [
+  {
+   "id": 106334,
+   "afstemningId": 10615,
+   "nummer": "B 36",
+   "type": "Beslutningsforslag",
+   "titel": "Forslag til folketingstingsbeslutning om Kongeriget Danmarks indgåelse af aftale af 22. september 2026 mellem Kongeriget Danmarks regering sammen med Naalakkersuisut og Amerikas Forenede Staters regering om ændring og supplering af aftalen om forsvaret af Grønland.",
+   "titelkort": "Om ændring og supplering af aftalen om forsvaret af Grønland.",
+   "resume": "Med forslaget giver Folketinget samtykke til en aftale mellem Grønland, Danmark og USA, der ændrer og supplerer aftalen om forsvaret af Grønland fra 1951. \n\nAftalen er forankret i NATO-samarbejdet, fastlægger USA’s militære adgang i Grønland, giver mulighed for nye forsvarsområder og indeholder bestemmelser om bl.a. miljøhensyn og udenlandske investeringer.",
+   "dato": "2026-11-19",
+   "url": "https://www.ft.dk/samling/20261/beslutningsforslag/B36/index.htm",
+   "resultat": {
+    "hverken": 0,
+    "for": 109,
+    "imod": 0
+   },
+   "partier": {
+    "S": "for",
+    "SF": "for",
+    "V": "for",
+    "DF": "for",
+    "LA": "for",
+    "M": "for",
+    "KF": "for",
+    "EL": "for",
+    "DD": "for",
+    "RV": "for",
+    "ALT": "for",
+    "BP": "for",
+    "IA": "for",
+    "UFG": "for"
+   },
+   "partikilde": "konklusion"
+  },
   {
    "id": 106552,
    "afstemningId": 10614,
